@@ -157,3 +157,6 @@ cython_debug/
 # Saved files
 *.pkl
 *.npy
+
+# Test files
+tests

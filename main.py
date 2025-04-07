@@ -11,7 +11,7 @@ from PyQt5.QtGui import QIcon, QIntValidator, QDoubleValidator
 from PyQt5.QtWidgets import QFileDialog
 import DataWindows
 import os
-from ImageHandler import ImageHandler
+from image_loader.image_handler import ImageHandler
 import Calibration
 import pickle
 import numpy as np
