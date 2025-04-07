@@ -11,7 +11,7 @@ from PyQt5.QtGui import QIcon, QIntValidator, QDoubleValidator
 from PyQt5.QtWidgets import QFileDialog
 import DataWindows
 import os
-from image_loader.image_handler import ImageHandler
+from image_handler import ImageHandler
 import Calibration
 import pickle
 import numpy as np
@@ -155,7 +155,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 	def open_picture(self):
 		""" Opens the file dialog and loads the data if the user selects a tiff file"""
-		file = QFileDialog.getOpenFileNames(self, 'Open file', str(self.load_dict['FLIM Load']), 'Tiff (*.tif *.tiff)')
+		file = QFileDialog.getOpenFileNames(self, 'Open file', str(self.load_dict['FLIM Load']), 'Tiff and PTU Files (*.tif *.tiff *.ptu)')
 		for data in file[0]:
 			self.load_data(data)
 
@@ -269,7 +269,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 	def loadCalibration(self):
 		"""Calculates Phi and M calibration values by using Calibration.py"""
-		file = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), 'Tiff (*.tif *.tiff)')
+		file = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), 'Tiff and Ptu Files (*.tif *.tiff *.ptu)')
 		if file[0] != '':
 			bin_width = float(self.cal.bin_width.text().replace(",","."))
 			freq = float(self.cal.Freq.text().replace(",","."))

@@ -4,12 +4,13 @@
 import numpy as np
 from skimage import io
 
+from image_loader.image_loader import ImageLoader
 
 def get_calibration_parameters(filename, bin_width=0.2208, freq=80, harmonic=1, tau_ref = 4):
 	"""Opens the tiff image file and calculates the fft and gets the center coordinates of the g and s. Returns
 	the angle and distance that these values need to be translated by to place the calibration measurement
 	at the position expected by the user"""
-	im = io.imread(filename)
+	im = ImageLoader.load(filename)
 	image = np.moveaxis(im, 0, 2)
 	bins = image.shape[2]
 	t_arr = np.linspace(bin_width / 2, bin_width * (bins - 1 / 2), bins)
