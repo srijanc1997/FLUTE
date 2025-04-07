@@ -40,6 +40,7 @@ An interactive tutorial is available on youtube <a href="https://www.youtube.com
 <div align="center">
 <img src="icons/MainWindow.PNG" width="700"> 
 </div>
+This software is based on FLUTE licensed under the BSD 3-Clause License. Modifications have been made by github@GuangchenW.
 
 Fluorescence Lifetime Ultimate Explorer (FLUTE) provides a graphical user interface to explore Fluorescence Lifetime Microscopy (FLIM) using phasor analysis. The GUI allows for quick and interactive analysis of experimental FLIM data, and can export results for further processing. 
 
