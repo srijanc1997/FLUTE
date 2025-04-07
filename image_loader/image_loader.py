@@ -31,6 +31,12 @@ class ImageLoader(ABC):
 	
 	@staticmethod
 	def load(filename):
+		""" Loads the image and returns as 3D array. Automatically determines the correct loader to use.
+		
+		:param filename: Name of the image file.
+		...
+		:return: numpy ndarray
+		"""
 		return ImageLoader.from_file(filename).load_image(filename)
 
 class TiffLoader(ImageLoader):
