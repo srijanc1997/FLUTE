@@ -17,30 +17,30 @@ matplotlib.use('QT5Agg')
 
 # Matplotlib canvas class to create figure
 class MplCanvas(Canvas):
-    def __init__(self):
-        self.fig = Figure()
-        # [left, bottom, width, height]
-        self.ax = self.fig.add_axes([0.15, 0.19, 0.8, 0.75])
-        plt.tight_layout()
-        Canvas.__init__(self, self.fig)
-        Canvas.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        Canvas.updateGeometry(self)
+	def __init__(self):
+		self.fig = Figure()
+		# [left, bottom, width, height]
+		self.ax = self.fig.add_axes([0.15, 0.19, 0.8, 0.75])
+		plt.tight_layout()
+		Canvas.__init__(self, self.fig)
+		Canvas.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+		Canvas.updateGeometry(self)
 
-    def full_plot(self):
-        self.ax.set_position([0, 0, 1, 1])
+	def full_plot(self):
+		self.ax.set_position([0, 0, 1, 1])
 
-    def save_fig(self, file):
-        self.fig.savefig(file)
+	def save_fig(self, file):
+		self.fig.savefig(file)
 
 
 # Matplotlib widget
 class MplWidget(QtWidgets.QWidget):
-    def __init__(self, parent=None):
-        QtWidgets.QWidget.__init__(self, parent)   # Inherit from QWidget
-        self.canvas = MplCanvas()                  # Create canvas object
-        self.vbl = QtWidgets.QVBoxLayout()         # Set box for plotting
-        self.vbl.addWidget(self.canvas)
-        self.setLayout(self.vbl)
+	def __init__(self, parent=None):
+		QtWidgets.QWidget.__init__(self, parent)   # Inherit from QWidget
+		self.canvas = MplCanvas()				   # Create canvas object
+		self.vbl = QtWidgets.QVBoxLayout()		   # Set box for plotting
+		self.vbl.addWidget(self.canvas)
+		self.setLayout(self.vbl)
 
-    def setText(self, *args, **kwargs):
-        pass
+	def setText(self, *args, **kwargs):
+		pass

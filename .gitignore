@@ -153,3 +153,7 @@ cython_debug/
 
 # OSX binary files
 .DS_Store
+
+# Saved files
+*.pkl
+*.npy

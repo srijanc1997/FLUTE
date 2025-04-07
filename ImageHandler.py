@@ -453,20 +453,20 @@ class ImageHandler:
 			tifffile.imsave(file + '/' + self.name + '_Dist.tiff', frac)
 
 		save_params = [f'number Of 3x3 Median Filters: {self.num_filter}\n',
-					   f'Intensity Min: {self.min_thresh:.3f}\n',
-					   f'Intensity Max: {self.max_thresh:.3f}\n',
-					   f'Phi Min (Deg, ns): ({self.applied_min_ang:.3f}, {1 / omega * np.tan(np.deg2rad(self.applied_min_ang)):.3f}) \n',
-					   f'Phi Max (Deg, ns): ({self.applied_max_ang:.3f}, {1 / omega * np.tan(np.deg2rad(self.applied_max_ang)):.3f})\n',
-					   f'Modulation Min (M, ns): ({self.applied_min_M/100:.3f}, {1 / omega * np.sqrt(1 / np.power(self.applied_min_M/100, 2) - 1):.3f})\n',
-					   f'Modulation Max (M, ns): ({self.applied_max_M/100:.3f}, {1 / omega * np.sqrt(1 / np.power(self.applied_max_M/100, 2) - 1):.3f})\n',
-					   f'Distance From Coordinates (g,s): {self.x_fraction:.3f}, {self.y_fraction:.3f}\n',
-					   f'Distance Min: {self.fraction_min:.3f}\n',
-					   f'Distance Max: {self.fraction_max:.3f}\n\n\n',
-					   f'Average g Coordinate: {x_avg:.3f}\n',
-					   f'Average s Coordinate: {y_avg:.3f}\n',
-					   f'Average TauP (ns): {np.nanmean(tau_p):.3f}\n',
-					   f'Average TauM (ns): {np.nanmean(tau_m):.3f}\n',
-					   f'Average distance: {np.nanmean(frac):.3f}\n']
+						f'Intensity Min: {self.min_thresh:.3f}\n',
+						f'Intensity Max: {self.max_thresh:.3f}\n',
+						f'Phi Min (Deg, ns): ({self.applied_min_ang:.3f}, {1 / omega * np.tan(np.deg2rad(self.applied_min_ang)):.3f}) \n',
+						f'Phi Max (Deg, ns): ({self.applied_max_ang:.3f}, {1 / omega * np.tan(np.deg2rad(self.applied_max_ang)):.3f})\n',
+						f'Modulation Min (M, ns): ({self.applied_min_M/100:.3f}, {1 / omega * np.sqrt(1 / np.power(self.applied_min_M/100, 2) - 1):.3f})\n',
+						f'Modulation Max (M, ns): ({self.applied_max_M/100:.3f}, {1 / omega * np.sqrt(1 / np.power(self.applied_max_M/100, 2) - 1):.3f})\n',
+						f'Distance From Coordinates (g,s): {self.x_fraction:.3f}, {self.y_fraction:.3f}\n',
+						f'Distance Min: {self.fraction_min:.3f}\n',
+						f'Distance Max: {self.fraction_max:.3f}\n\n\n',
+						f'Average g Coordinate: {x_avg:.3f}\n',
+						f'Average s Coordinate: {y_avg:.3f}\n',
+						f'Average TauP (ns): {np.nanmean(tau_p):.3f}\n',
+						f'Average TauM (ns): {np.nanmean(tau_m):.3f}\n',
+						f'Average distance: {np.nanmean(frac):.3f}\n']
 
 		with open(file + '/' + self.name + '_Parameters.txt', 'w') as f:
 			f.writelines(save_params)
