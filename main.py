@@ -115,9 +115,11 @@ class MainWindow(QtWidgets.QMainWindow):
 			with open('saved_dict.pkl', 'rb') as f:
 				self.load_dict = pickle.load(f)
 		else:
-			self.load_dict = {'FLIM Load': '', "Cal Load": '', "Bin Width": 0.227, "Freq": 80.0, "Tau Ref": 4.0,
-								"Harmonic": 1.0, "Phi Cal": 0.0, "M Cal": 1.0,"Fraction": 0.4, "save_Dir": '', "FractionX": 1.0, "FractionY":0.0,
-								"framex": 611, "framey": 510, "table0Width": 290, "table1Width": 50, "table2Width": 143}
+			self.load_dict = {
+				'FLIM Load': '', "Cal Load": '', "Bin Width": 0.227, "Freq": 80.0, "Tau Ref": 4.0,
+				"Harmonic": 1.0, "Phi Cal": 0.0, "M Cal": 1.0,"Fraction": 0.4, "save_Dir": '', "FractionX": 1.0, "FractionY":0.0,
+				"framex": 611, "framey": 510, "table0Width": 290, "table1Width": 50, "table2Width": 143
+			}
 			with open('saved_dict.pkl', 'wb') as f:
 				pickle.dump(self.load_dict, f)
 		f.close()
@@ -185,9 +187,13 @@ class MainWindow(QtWidgets.QMainWindow):
 		"""loads a picture from the file_name location, and populates the table widget"""
 		self.load_dict['FLIM Load'] = os.path.dirname(file_name)
 		# keep track of the image
-		self.image_arr.append(ImageHandler(file_name, self.load_dict['Phi Cal'], self.load_dict['M Cal'],
-											self.load_dict['Bin Width'], self.load_dict['Freq'],
-											self.load_dict['Harmonic']))
+		self.image_arr.append(
+			ImageHandler(
+				file_name, self.load_dict['Phi Cal'], self.load_dict['M Cal'],
+				self.load_dict['Bin Width'], self.load_dict['Freq'],
+				self.load_dict['Harmonic']
+			)
+		)
 		# bind the action when the user clicks the plot
 		self.image_arr[-1].binding_id = \
 			self.image_arr[-1].graph_window.Plot.canvas.mpl_connect('button_press_event', self.update_circle)
