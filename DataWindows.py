@@ -59,6 +59,11 @@ class Calibration(QtWidgets.QMainWindow):
 		super(Calibration, self).__init__()
 		uic.loadUi(dir_path + "/ui files/CalibrationWindow.ui", self)
 
+class FLIMSelectionWindow(QtWidgets.QMainWindow):
+	"""Instantiate the FLIM data selection window."""
+	def __init__(self):
+		super(FLIMSelectionWindow, self).__init__()
+		uic.loadUi(dir_path + "/ui files/FLIMSelectionWindow.ui", self)
 
 class CloseWindows(QtWidgets.QMainWindow):
 	"""Opens the dialog to ask if the user really wants to close the windows"""

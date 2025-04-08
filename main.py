@@ -6,8 +6,8 @@ import sys
 from sys import platform
 from PyQt5 import QtWidgets
 from PyQt5 import uic, QtCore
-from PyQt5.QtCore import QPropertyAnimation, QRect, QEasingCurve, QTimer
-from PyQt5.QtGui import QIcon, QIntValidator, QDoubleValidator
+from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QEasingCurve, QTimer
+from PyQt5.QtGui import QIcon, QIntValidator, QDoubleValidator, QFontMetrics
 from PyQt5.QtWidgets import QFileDialog
 import DataWindows
 import os
@@ -51,7 +51,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.menu_size = 135
 		self.menu_x = self.current_frame.x()
 		self.save_type = 'all'
-		self.LoadFLIM.clicked.connect(self.open_picture)
+		self.LoadFLIM.clicked.connect(self.open_flim_selection_window)
 		self.LoadCalibr.clicked.connect(self.open_calibration)
 		self.bulk_load.clicked.connect(self.bulk_open)
 
@@ -119,7 +119,7 @@ class MainWindow(QtWidgets.QMainWindow):
 				'FLIM Load': '', "Cal Load": '', "Bin Width": 0.227, "Freq": 80.0, "Tau Ref": 4.0,
 				"Harmonic": 1.0, "Phi Cal": 0.0, "M Cal": 1.0,"Fraction": 0.4, "save_Dir": '', "FractionX": 1.0, "FractionY":0.0,
 				"framex": 611, "framey": 510, "table0Width": 290, "table1Width": 50, "table2Width": 143,
-				"calibration_file": "", "calibration_channel": 0
+				"calibration_file": "", "calibration_channel": 0, "flim_file":"", "flim_channel": 0
 			}
 			with open('saved_dict.pkl', 'wb') as f:
 				pickle.dump(self.load_dict, f)
@@ -154,11 +154,32 @@ class MainWindow(QtWidgets.QMainWindow):
 				del self.image_arr[idx]
 				self.tableWidget.removeRow(idx)
 
-	def open_picture(self):
+	def open_flim_selection_window(self):
 		""" Opens the file dialog and loads the data if the user selects a tiff file"""
-		file = QFileDialog.getOpenFileNames(self, 'Open file', str(self.load_dict['FLIM Load']), 'Tiff and PTU Files (*.tif *.tiff *.ptu)')
-		for data in file[0]:
-			self.load_data(data)
+		self.win_flim = DataWindows.FLIMSelectionWindow()
+		self.win_flim.ChannelSelector.setValue(int(self.load_dict["flim_channel"]))
+		self.update_elided_label(self.win_flim.FilenameLabel, self.load_dict["flim_file"], "No file selected")
+		self.win_flim.FileSelector.clicked.connect(self.on_select_flim_button_pressed)
+		self.win_flim.Cancel.clicked.connect(self.on_select_flim_cancelled)
+		self.win_flim.Load.clicked.connect(self.on_load_flim_button_pressed)
+		self.win_flim.show()
+		
+	
+	def on_select_flim_button_pressed(self):
+		filename, _filter = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['FLIM Load']), "Tiff or Ptu Files (*.tif *.tiff *.ptu)")
+		if filename != "":
+			self.load_dict["flim_file"] = filename
+		self.update_elided_label(self.win_flim.FilenameLabel, self.load_dict["flim_file"], "No file selected")
+	
+	def on_select_flim_cancelled(self):
+		del self.win_flim
+	
+	def on_load_flim_button_pressed(self):
+		filename = self.load_dict["flim_file"]
+		if filename != "":
+			self.load_dict["flim_channel"] = self.win_flim.ChannelSelector.value()
+			self.load_data(filename)
+			del self.win_flim
 
 	def range_lines(self):
 		"""Turns on and off the thresholding lines on the plot when you check ShowRangeLines on the window"""
@@ -190,9 +211,13 @@ class MainWindow(QtWidgets.QMainWindow):
 		# keep track of the image
 		self.image_arr.append(
 			ImageHandler(
-				file_name, self.load_dict['Phi Cal'], self.load_dict['M Cal'],
-				self.load_dict['Bin Width'], self.load_dict['Freq'],
-				self.load_dict['Harmonic']
+				file_name,
+				channel=self.load_dict["flim_channel"],
+				phi_cal=self.load_dict['Phi Cal'],
+				m_cal=self.load_dict['M Cal'],
+				bin_width=self.load_dict['Bin Width'],
+				freq=self.load_dict['Freq'],
+				harmonic=self.load_dict['Harmonic']
 			)
 		)
 		# bind the action when the user clicks the plot
@@ -218,26 +243,35 @@ class MainWindow(QtWidgets.QMainWindow):
 	def open_calibration(self):
 		"""Opens the calibration window to let the user type in their parameters, and then runs loadCalibration() which
 		 calculates the values of Phi and M to translate the data by"""
+		# NOTE: I see, we are creating and deleting windows for each request.
+		# Since the windows are fairly light and not used too frequently, this should be ok.
 		self.cal = DataWindows.Calibration()
 		self.cal.Freq.setText(str(self.load_dict['Freq']))
 		self.cal.bin_width.setText(str(self.load_dict['Bin Width']))
 		self.cal.Tau.setText(str(self.load_dict['Tau Ref']))
 		self.cal.Harmonic.setText(str(self.load_dict['Harmonic']))
-		self.cal.FilenameLabel.setText(str(self.load_dict["calibration_file"]))
+		self.update_elided_label(self.cal.FilenameLabel, self.load_dict["calibration_file"], "No file selected")
 		self.cal.ChannelSelector.setValue(int(self.load_dict["calibration_channel"]))
 		self.cal.show()
-		self.cal.FileSelector.clicked.connect(self.select_calibration_file)
+		self.cal.FileSelector.clicked.connect(self.on_calibration_selector_pressed)
 		self.cal.Cancel.clicked.connect(self.kill_cal)
 		self.cal.LoadCalibr.clicked.connect(self.loadCalibration)
 	
-	def select_calibration_file(self):
-		filename, _filter = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), 'Tiff and Ptu Files (*.tif *.tiff *.ptu)')
+	def on_calibration_selector_pressed(self):
+		filename, _filter = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), "Tiff or Ptu Files (*.tif *.tiff *.ptu)")
 		# We allow the filename to be an empty string. This informs the Load button things aren't ready.
 		if filename != "":
 			self.load_dict["calibration_file"] = filename
-		self.cal.FilenameLabel.setText("No file selected" if self.load_dict["calibration_file"] == "" else self.load_dict["calibration_file"])
+		self.update_elided_label(self.cal.FilenameLabel, self.load_dict["calibration_file"], "No file selected")
 		
-
+	def update_elided_label(self, label, text, alt_text="None"):
+		if text == "":
+			label.setText(alt_text)
+			return
+		fm = QFontMetrics(label.font())
+		elided_text = fm.elidedText(text, Qt.ElideMiddle, label.width())
+		label.setText(elided_text)
+	
 	def fraction_bound_color(self):
 		"""Opens the window to set the fraction bound parameter, such as 0.4ns for NADH. If the user clicks enter, this
 		then changes the coordinates of the fraction bound circles to be centered on the lifetime selected
@@ -281,7 +315,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 	def loadCalibration(self):
 		"""Calculates Phi and M calibration values by using Calibration.py"""
-		#file = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), 'Tiff and Ptu Files (*.tif *.tiff *.ptu)')
 		filename = self.load_dict["calibration_file"]
 		if filename != "":
 			bin_width = float(self.cal.bin_width.text().replace(",","."))

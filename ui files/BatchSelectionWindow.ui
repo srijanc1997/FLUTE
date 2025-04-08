@@ -22,7 +22,7 @@
      <x>10</x>
      <y>10</y>
      <width>341</width>
-     <height>165</height>
+     <height>161</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -215,21 +215,9 @@ QPushButton:hover{
     </item>
     <item row="3" column="0" colspan="4">
      <widget class="QLabel" name="FilenameLabel">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>320</width>
-        <height>0</height>
-       </size>
-      </property>
       <property name="maximumSize">
        <size>
-        <width>640</width>
+        <width>320</width>
         <height>30</height>
        </size>
       </property>

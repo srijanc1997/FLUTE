@@ -49,6 +49,10 @@ class TiffLoader(ImageLoader):
 class PtuLoader(ImageLoader):
 	def load_image(self, filename, channel=0):
 		ptu = ptufile.PtuFile(filename)
+		# TODO: Better error logging
+		if channel >= ptu.shape[3]:
+			print("FLIM data does not have channel %d! (Channel index is 0-based)" % channel)
+			return None
 		data = ptu[::-1,...,channel,:]
 		data = np.transpose(data, (2, 1, 0)).astype(np.uint8)
 		return data
