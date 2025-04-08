@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>356</width>
-    <height>130</height>
+    <height>176</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
      <x>10</x>
      <y>10</y>
      <width>341</width>
-     <height>112</height>
+     <height>161</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -41,39 +41,6 @@
     <property name="horizontalSpacing">
      <number>6</number>
     </property>
-    <item row="0" column="3">
-     <widget class="QLineEdit" name="Tau">
-      <property name="styleSheet">
-       <string notr="true">background: white</string>
-      </property>
-      <property name="text">
-       <string>4</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2" colspan="2">
-     <widget class="QPushButton" name="LoadCalibr">
-      <property name="styleSheet">
-       <string notr="true">QPushButton{
-
-            border: 4px solid '#4aa3d1';
-            background: '#4aa3d1';
-            color: white;
-            font-family: 'Helvetica';
-            font-size: 15px;
-            padding: 0px 0;
-            margin-top: 0px
-}
-QPushButton:hover{
-	background: '#173953';
-     border: 4px solid '#173953'
-}</string>
-      </property>
-      <property name="text">
-       <string>Choose File</string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="2">
      <widget class="QLabel" name="label_5">
       <property name="styleSheet">
@@ -95,16 +62,6 @@ QPushButton:hover{
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="styleSheet">
-       <string notr="true">color: #FFFFFF</string>
-      </property>
-      <property name="text">
-       <string>Laser Freq. (MHz):</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="styleSheet">
@@ -115,17 +72,71 @@ QPushButton:hover{
       </property>
      </widget>
     </item>
-    <item row="1" column="3">
-     <widget class="QLineEdit" name="Harmonic">
+    <item row="0" column="3">
+     <widget class="QLineEdit" name="Tau">
       <property name="styleSheet">
        <string notr="true">background: white</string>
       </property>
       <property name="text">
-       <string>1</string>
+       <string>4</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0" colspan="2">
+    <item row="4" column="2" colspan="2">
+     <widget class="QPushButton" name="LoadCalibr">
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+
+            border: 4px solid '#4aa3d1';
+            background: '#4aa3d1';
+            color: white;
+            font-family: 'Helvetica';
+            font-size: 15px;
+            padding: 0px 0;
+            margin-top: 0px
+}
+QPushButton:hover{
+	background: '#173953';
+     border: 4px solid '#173953'
+}</string>
+      </property>
+      <property name="text">
+       <string>Load</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="styleSheet">
+       <string notr="true">color: #FFFFFF</string>
+      </property>
+      <property name="text">
+       <string>Laser Freq. (MHz):</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="Freq">
+      <property name="styleSheet">
+       <string notr="true">background: white</string>
+      </property>
+      <property name="text">
+       <string>80</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="label_4">
+      <property name="styleSheet">
+       <string notr="true">color: #FFFFFF
+</string>
+      </property>
+      <property name="text">
+       <string>Tau Ref. (ns):</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
      <widget class="QPushButton" name="Cancel">
       <property name="styleSheet">
        <string notr="true">QPushButton{
@@ -149,24 +160,72 @@ QPushButton:hover{
       </property>
      </widget>
     </item>
-    <item row="0" column="2">
-     <widget class="QLabel" name="label_4">
-      <property name="styleSheet">
-       <string notr="true">color: #FFFFFF
-</string>
-      </property>
-      <property name="text">
-       <string>Tau Ref. (ns):</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="Freq">
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="Harmonic">
       <property name="styleSheet">
        <string notr="true">background: white</string>
       </property>
       <property name="text">
-       <string>80</string>
+       <string>1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2" colspan="2">
+     <widget class="QPushButton" name="FileSelector">
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+
+            border: 4px solid '#4aa3d1';
+            background: '#4aa3d1';
+            color: white;
+            font-family: 'Helvetica';
+            font-size: 15px;
+            padding: 0px 0;
+            margin-top: 0px
+}
+QPushButton:hover{
+	background: '#173953';
+     border: 4px solid '#173953'
+}</string>
+      </property>
+      <property name="text">
+       <string>Choose File</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QSpinBox" name="ChannelSelector">
+      <property name="styleSheet">
+       <string notr="true">background: white</string>
+      </property>
+      <property name="wrapping">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="styleSheet">
+       <string notr="true">color: #FFFFFF</string>
+      </property>
+      <property name="text">
+       <string>Channel</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="4">
+     <widget class="QLabel" name="FilenameLabel">
+      <property name="maximumSize">
+       <size>
+        <width>320</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: white</string>
+      </property>
+      <property name="text">
+       <string>No file selected</string>
       </property>
      </widget>
     </item>

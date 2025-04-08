@@ -118,7 +118,8 @@ class MainWindow(QtWidgets.QMainWindow):
 			self.load_dict = {
 				'FLIM Load': '', "Cal Load": '', "Bin Width": 0.227, "Freq": 80.0, "Tau Ref": 4.0,
 				"Harmonic": 1.0, "Phi Cal": 0.0, "M Cal": 1.0,"Fraction": 0.4, "save_Dir": '', "FractionX": 1.0, "FractionY":0.0,
-				"framex": 611, "framey": 510, "table0Width": 290, "table1Width": 50, "table2Width": 143
+				"framex": 611, "framey": 510, "table0Width": 290, "table1Width": 50, "table2Width": 143,
+				"calibration_file": "", "calibration_channel": 0
 			}
 			with open('saved_dict.pkl', 'wb') as f:
 				pickle.dump(self.load_dict, f)
@@ -222,9 +223,20 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.cal.bin_width.setText(str(self.load_dict['Bin Width']))
 		self.cal.Tau.setText(str(self.load_dict['Tau Ref']))
 		self.cal.Harmonic.setText(str(self.load_dict['Harmonic']))
+		self.cal.FilenameLabel.setText(str(self.load_dict["calibration_file"]))
+		self.cal.ChannelSelector.setValue(int(self.load_dict["calibration_channel"]))
 		self.cal.show()
+		self.cal.FileSelector.clicked.connect(self.select_calibration_file)
 		self.cal.Cancel.clicked.connect(self.kill_cal)
 		self.cal.LoadCalibr.clicked.connect(self.loadCalibration)
+	
+	def select_calibration_file(self):
+		filename, _filter = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), 'Tiff and Ptu Files (*.tif *.tiff *.ptu)')
+		# We allow the filename to be an empty string. This informs the Load button things aren't ready.
+		if filename != "":
+			self.load_dict["calibration_file"] = filename
+		self.cal.FilenameLabel.setText("No file selected" if self.load_dict["calibration_file"] == "" else self.load_dict["calibration_file"])
+		
 
 	def fraction_bound_color(self):
 		"""Opens the window to set the fraction bound parameter, such as 0.4ns for NADH. If the user clicks enter, this
@@ -269,19 +281,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
 	def loadCalibration(self):
 		"""Calculates Phi and M calibration values by using Calibration.py"""
-		file = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), 'Tiff and Ptu Files (*.tif *.tiff *.ptu)')
-		if file[0] != '':
+		#file = QFileDialog.getOpenFileName(self, 'Open file', str(self.load_dict['Cal Load']), 'Tiff and Ptu Files (*.tif *.tiff *.ptu)')
+		filename = self.load_dict["calibration_file"]
+		if filename != "":
 			bin_width = float(self.cal.bin_width.text().replace(",","."))
 			freq = float(self.cal.Freq.text().replace(",","."))
 			harmonic = float(self.cal.Harmonic.text().replace(",","."))
 			tau_ref = float(self.cal.Tau.text().replace(",","."))
-			self.load_dict['Cal Load'] = os.path.dirname(file[0])
+			channel = self.cal.ChannelSelector.value()
+			self.load_dict['Cal Load'] = os.path.dirname(filename)
 			self.load_dict['Freq'] = freq
 			self.load_dict['Bin Width'] = bin_width
 			self.load_dict['Tau Ref'] = tau_ref
 			self.load_dict['Harmonic'] = harmonic
+			self.load_dict["calibration_channel"] = channel
 			self.load_dict['Phi Cal'], self.load_dict['M Cal'] = \
-				Calibration.get_calibration_parameters(file[0], bin_width, freq, harmonic, tau_ref)
+				Calibration.get_calibration_parameters(filename, channel, bin_width, freq, harmonic, tau_ref)
 			self.Phi_cal_box.setText("{:.4f}".format(self.load_dict['Phi Cal']))
 			self.m_cal_box.setText("{:.4f}".format(self.load_dict['M Cal']))
 			del self.cal
