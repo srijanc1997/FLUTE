@@ -119,7 +119,7 @@ class MainWindow(QtWidgets.QMainWindow):
 				'FLIM Load': '', "Cal Load": '', "Bin Width": 0.227, "Freq": 80.0, "Tau Ref": 4.0,
 				"Harmonic": 1.0, "Phi Cal": 0.0, "M Cal": 1.0,"Fraction": 0.4, "save_Dir": '', "FractionX": 1.0, "FractionY":0.0,
 				"framex": 611, "framey": 510, "table0Width": 290, "table1Width": 50, "table2Width": 143,
-				"calibration_file": "", "calibration_channel": 0, "flim_file":"", "flim_channel": 0
+				"calibration_file": "", "calibration_channel": 1, "flim_file":"", "flim_channel": 0
 			}
 			with open('saved_dict.pkl', 'wb') as f:
 				pickle.dump(self.load_dict, f)

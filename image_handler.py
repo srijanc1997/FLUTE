@@ -93,7 +93,7 @@ class ImageHandler:
 
 		#TauM colourmap
 		elif self.color_map_select == 1:
-			viridis = cm.get_cmap('jet_r', 20)
+			viridis = cm.get_cmap('viridis_r', 20)
 			arr = self.distance_arr.copy()
 			arr[arr < 0] = 0
 			arr[mask] = 0
@@ -112,7 +112,7 @@ class ImageHandler:
 
 		# TauP colourmap
 		elif self.color_map_select == 2:
-			viridis = cm.get_cmap('jet', 20)
+			viridis = cm.get_cmap('viridis', 20)
 			arr = self.angle_arr.copy()
 			arr[arr < 0] = 0
 			np.nan_to_num(arr, copy=False)
@@ -132,7 +132,7 @@ class ImageHandler:
 
 		#Jet instensity colourmap
 		elif self.color_map_select == 3:
-			viridis = cm.get_cmap('jet', 20)
+			viridis = cm.get_cmap('viridis', 20)
 			im = np.array(self.original_image.copy(), dtype = np.int64)
 			if len(im[~mask]) != 0:
 				im = ((im - np.min(im[~mask])) * (1 / (np.max(im[~mask]) - np.min(im[~mask]))))
@@ -145,7 +145,7 @@ class ImageHandler:
 
 		# Fraction Bound colourmap.
 		elif self.color_map_select == 4:
-			viridis = cm.get_cmap('jet', 20)
+			viridis = cm.get_cmap('viridis', 20)
 			arr = self.fraction_arr.copy()
 			arr[arr < 0] = 0
 			if len(arr[~mask]) != 0:
