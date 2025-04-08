@@ -23,7 +23,7 @@ class Picture(QtWidgets.QMainWindow):
 	def __init__(self, name):
 		super(Picture, self).__init__()
 
-		height, width, channel = 300, 300, 3
+		height, width, channel = 512, 512, 3
 		bytesPerLine = 3 * width
 
 		self.widget = QLabel("HelloWorld")
@@ -40,8 +40,8 @@ class Picture(QtWidgets.QMainWindow):
 
 	def set_image(self, im):
 		"""Displays the image im"""
-		im = cv2.resize(im, (300, 300))
-		qImg = QImage(im.data, 300,300, QImage.Format_RGB888)
+		im = cv2.resize(im, (512, 512))
+		qImg = QImage(im.data, 512,512, QImage.Format_RGB888)
 		self.widget.setPixmap(QPixmap(qImg))
 
 	def closeEvent(self, event):

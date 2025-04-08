@@ -53,6 +53,6 @@ class PtuLoader(ImageLoader):
 		if channel >= ptu.shape[3]:
 			print("FLIM data does not have channel %d! (Channel index is 0-based)" % channel)
 			return None
-		data = ptu[::-1,...,channel,:]
-		data = np.transpose(data, (2, 1, 0)).astype(np.uint8)
+		data = ptu.decode_image(None, dtype=np.uint8, frame=-1, channel=channel, keepdims=False)
+		data = np.moveaxis(data, 2, 0)
 		return data
