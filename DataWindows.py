@@ -147,8 +147,8 @@ class Graph(QtWidgets.QMainWindow):
 
 		self.color_map = 0 #0=densitymap, 1=TauM, 2=TauP, 3=densitymap, 4=fractionBound
 
-		self.cmap = matplotlib.cm.magma.copy()
-		self.cmap_r = matplotlib.cm.magma_r.copy()
+		self.cmap = matplotlib.cm.viridis.copy()
+		self.cmap_r = matplotlib.cm.viridis_r.copy()
 		self.cmap.set_bad('k', alpha=0)
 		self.cmap_noir = matplotlib.cm.Greys.copy()
 
