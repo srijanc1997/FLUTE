@@ -170,6 +170,8 @@ class MainWindow(QtWidgets.QMainWindow):
 		if filename != "":
 			self.load_dict["flim_file"] = filename
 		self.update_elided_label(self.win_flim.FilenameLabel, self.load_dict["flim_file"], "No file selected")
+		self.win_flim.raise_()
+		self.win_flim.activateWindow()
 	
 	def on_select_flim_cancelled(self):
 		del self.win_flim
@@ -263,6 +265,8 @@ class MainWindow(QtWidgets.QMainWindow):
 		if filename != "":
 			self.load_dict["calibration_file"] = filename
 		self.update_elided_label(self.cal.FilenameLabel, self.load_dict["calibration_file"], "No file selected")
+		self.cal.raise_()
+		self.cal.activateWindow()
 		
 	def update_elided_label(self, label, text, alt_text="None"):
 		if text == "":
