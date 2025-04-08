@@ -216,7 +216,7 @@ QPushButton:hover{
     <item row="3" column="0" colspan="4">
      <widget class="QLabel" name="FilenameLabel">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
