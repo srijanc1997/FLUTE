@@ -145,7 +145,7 @@ class ImageHandler:
 
 		# Fraction Bound colourmap.
 		elif self.color_map_select == 4:
-			viridis = cm.get_cmap('viridis', 20)
+			viridis = cm.get_cmap('jet', 20)
 			arr = self.fraction_arr.copy()
 			arr[arr < 0] = 0
 			if len(arr[~mask]) != 0:

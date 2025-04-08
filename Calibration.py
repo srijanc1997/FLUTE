@@ -1,9 +1,5 @@
-# Calculates the calibration parameters and returns the phi and m offsets
-
-# imports
 import numpy as np
 from skimage import io
-
 from image_loader.image_loader import ImageLoader
 
 def get_calibration_parameters(filename, channel, bin_width=0.2208, freq=80, harmonic=1, tau_ref=4):
@@ -17,13 +13,15 @@ def get_calibration_parameters(filename, channel, bin_width=0.2208, freq=80, har
 
 	integral = np.sum(image, axis=2, dtype=np.float64)
 	integral[integral == 0] = 1e-5  # Avoid division by zero
+	inv_integral = 1.0 / integral  # Precompute reciprocal
 
 	omega_t = 2 * np.pi * freq / 1000 * harmonic * t_arr
 	cos_omega_t = np.cos(omega_t)
 	sin_omega_t = np.sin(omega_t)
 
-	g = np.tensordot(image, cos_omega_t, axes=(2, 0)) / integral
-	s = np.tensordot(image, sin_omega_t, axes=(2, 0)) / integral
+	# Use einsum for better performance
+	g = np.einsum('ijk,k->ij', image, cos_omega_t) * inv_integral
+	s = np.einsum('ijk,k->ij', image, sin_omega_t) * inv_integral
 
 	# Flatten and calculate mean directly
 	coor_x = np.mean(g)
