@@ -21,6 +21,7 @@ class ImageHandler:
 	def __init__(self, filename, channel=0, phi_cal=0, m_cal=1, bin_width=0.2208, freq=80, harmonic=1):
 		im = ImageLoader.load(filename, channel)
 		print("Shape of image: ", im.shape)
+		print("Total count: ", im.sum())
 		self.name = os.path.splitext(os.path.basename(filename))[0]
 		self.original_image = np.sum(im, axis=0)
 		self.max = np.max(self.original_image)
