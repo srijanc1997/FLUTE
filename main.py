@@ -521,8 +521,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
 	def cal_update(self):
 		"""updates the calibration values when the user changes them"""
-		self.load_dict['Phi Cal'] = float(self.Phi_cal_box.text().replace(",","."))
-		self.load_dict['M Cal'] = float(self.m_cal_box.text().replace(",","."))
+		phi_cal = self.Phi_cal_box.text().replace(",",".")
+		m_cal = self.m_cal_box.text().replace(",",".")
+		self.load_dict['Phi Cal'] = float(phi_cal) if len(phi_cal)>0 and phi_cal!='-' else 0.0
+		self.load_dict['M Cal'] = float(m_cal) if len(m_cal)>0 and m_cal!='-' else 0.0
 
 	def applyFilter(self):
 		"""Applies convolutional median filters to selected images"""
