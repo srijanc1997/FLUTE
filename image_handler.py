@@ -94,7 +94,7 @@ class ImageHandler:
 
 		#TauM colourmap
 		elif self.color_map_select == 1:
-			viridis = cm.get_cmap('jet_r', 20)
+			viridis = cm.get_cmap('viridis_r', 20)
 			arr = self.distance_arr.copy()
 			arr[arr < 0] = 0
 			arr[mask] = 0
@@ -113,7 +113,7 @@ class ImageHandler:
 
 		# TauP colourmap
 		elif self.color_map_select == 2:
-			viridis = cm.get_cmap('jet', 20)
+			viridis = cm.get_cmap('viridis', 20)
 			arr = self.angle_arr.copy()
 			arr[arr < 0] = 0
 			np.nan_to_num(arr, copy=False)
@@ -133,7 +133,7 @@ class ImageHandler:
 
 		#Jet instensity colourmap
 		elif self.color_map_select == 3:
-			viridis = cm.get_cmap('jet', 20)
+			viridis = cm.get_cmap('viridis', 20)
 			im = np.array(self.original_image.copy(), dtype = np.int64)
 			if len(im[~mask]) != 0:
 				im = ((im - np.min(im[~mask])) * (1 / (np.max(im[~mask]) - np.min(im[~mask]))))
@@ -266,19 +266,27 @@ class ImageHandler:
 		"""Performs fft on the image data to get the g and s coordinates. see https://doi.org/10.1073/pnas.1108161108"""
 		image = np.moveaxis(image, 0, 2)
 		bins = image.shape[2]
-		t_arr = np.linspace(self.bin_width / 2, self.bin_width * (bins - 1 / 2), bins)
+		t_arr = self.bin_width * (np.arange(bins) + 0.5)
 
-		integral = np.sum(image, axis=2).astype(float)
-		integral[integral == 0] = 0.00001
-		g = np.sum(image[:, ...] * np.cos(2 * np.pi * self.freq / 1000 * self.harmonic * t_arr[:]), axis=2) / integral
-		s = np.sum(image[:, ...] * np.sin(2 * np.pi * self.freq / 1000 * self.harmonic * t_arr[:]), axis=2) / integral
+		integral = np.sum(image, axis=2, dtype=np.float64)
+		integral[integral == 0] = 0.00001  # Avoid division by zero
 
-		R = np.array(((np.cos(self.phi_cal), -np.sin(self.phi_cal)), (np.sin(self.phi_cal), np.cos(self.phi_cal))))
-		mask = np.ones(image.shape[:2]).astype(bool)
-		arr = R.dot([g[mask], s[mask]]) * self.m_cal
+		# Precompute constants for cosine and sine to avoid redundant calculations
+		omega_t = 2 * np.pi * self.freq / 1000 * self.harmonic * t_arr
+		cos_omega_t = np.cos(omega_t)
+		sin_omega_t = np.sin(omega_t)
 
-		g_coor = arr[0].flatten()
-		s_coor = arr[1].flatten()
+		# Use einsum for optimized summation
+		g = np.einsum('ijk,k->ij', image, cos_omega_t) / integral
+		s = np.einsum('ijk,k->ij', image, sin_omega_t) / integral
+
+		# Apply rotation matrix and calibration in a vectorized manner
+		cos_phi, sin_phi = np.cos(self.phi_cal), np.sin(self.phi_cal)
+		g_cal = g * cos_phi - s * sin_phi
+		s_cal = g * sin_phi + s * cos_phi
+
+		g_coor = (g_cal * self.m_cal).flatten()
+		s_coor = (s_cal * self.m_cal).flatten()
 		return g_coor, s_coor
 
 	def dead(self):
