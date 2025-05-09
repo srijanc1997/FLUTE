@@ -4,8 +4,8 @@
 #imports
 from PyQt5 import QtWidgets
 from PyQt5 import uic
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QImage, QPixmap, QColor
+from PyQt5.QtWidgets import QLabel, QFileDialog
 from PyQt5.QtCore import Qt
 import numpy as np
 import cv2
@@ -100,9 +100,11 @@ class Graph(QtWidgets.QMainWindow):
 		self.Plot.canvas.ax.plot(x, y, 'r')
 		self.Plot.canvas.ax.set_xlabel('g', fontsize=12, weight='bold')
 		self.Plot.canvas.ax.set_ylabel('s', fontsize=12, weight='bold')
-
+		
+		self.btnSavePlot.clicked.connect(self.save_fig)
+		
 		self.MHz = '{0:.0f}'.format(MHz)
-
+		
 		# load the range lines horizontally and vertically
 		y = np.tan((np.radians(0)) * x - 0.001)
 		self.min_line, = self.Plot.canvas.ax.plot(x,y)
@@ -223,10 +225,10 @@ class Graph(QtWidgets.QMainWindow):
 		# points which are outside of the thresholding
 		self.Plot.canvas.ax.add_image(im2)
 		self.Plot.canvas.ax.add_image(im)
-		if len(self.MHz) <= 2:
-			self.Plot.canvas.ax.text(0.8, 0.55, self.MHz + " MHz", fontsize=12)
-		else:
-			self.Plot.canvas.ax.text(0.75, 0.55, self.MHz + " MHz", fontsize=12)
+		# if len(self.MHz) <= 2:
+		#	self.Plot.canvas.ax.text(0.8, 0.55, self.MHz + " MHz", fontsize=12)
+		# else:
+		#	self.Plot.canvas.ax.text(0.75, 0.55, self.MHz + " MHz", fontsize=12)
 		# list = self.Plot.canvas.ax.get_images()
 
 
@@ -365,13 +367,25 @@ class Graph(QtWidgets.QMainWindow):
 		self.y_fraction = y
 
 	def save_fig(self, file):
-		"""Saves a picture of the plot in file path"""
-		self.Plot.canvas.save_fig(file)
+		"""Saves the figure as a png file"""	
+		# 1) Let the user pick a file name
+		fname, _ = QFileDialog.getSaveFileName(
+			self,
+			"Save Plot As…",
+			"",
+			"PNG Files (*.png);;All Files (*)"
+		)
+		
+		if not fname: return
+
+		self.Plot.canvas.figure.savefig(
+			fname,
+			dpi=300,
+			bbox_inches='tight'
+		)
 
 	def set_alpha(self, value):
 		self.line_alpha = value
 		self.update_circle_range(self.circle_min_val, self.circle_max_val)
 		self.update_angle_range(self.angle_min_val, self.angle_max_val)
 		self.update_fraction_range(self.fraction_min, self.fraction_max)
-
-

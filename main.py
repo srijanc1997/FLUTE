@@ -5,13 +5,17 @@
 import sys
 from sys import platform
 from PyQt5 import QtWidgets
+from PyQt5 import QtGui
+
 from PyQt5 import uic, QtCore
 from PyQt5.QtCore import Qt, QPropertyAnimation, QRect, QEasingCurve, QTimer
-from PyQt5.QtGui import QIcon, QIntValidator, QDoubleValidator, QFontMetrics
+from PyQt5.QtGui import QIcon, QIntValidator, QDoubleValidator, QFontMetrics, QColor
 from PyQt5.QtWidgets import QFileDialog
 import DataWindows
 import os
+
 from image_handler import ImageHandler
+from data_windows import MultiPhasorSelector
 import Calibration
 import pickle
 import numpy as np
@@ -58,7 +62,8 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.HomeFrameButton.clicked.connect(lambda: self.change_frame(self.MainFrame))
 		self.GraphButton.clicked.connect(lambda: self.change_frame(self.GraphFrame))
 		self.PictureButton.clicked.connect(lambda: self.change_frame(self.PictureFrame))
-
+		self.MultiPhasorButton.clicked.connect(self.open_multi_phasor_selector)
+		
 		self.Phi_cal_box.setValidator(QDoubleValidator())
 		self.Phi_cal_box.textEdited.connect(self.cal_update)
 		self.m_cal_box.setValidator(QDoubleValidator())
@@ -109,7 +114,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.close_selected.clicked.connect(self.CloseWindows)
 		self.ShowRangeLines.clicked.connect(self.range_lines)
 
-	# To make it easier to use the program, various parameters are saved from the last use, so that you don't need
+		# To make it easier to use the program, various parameters are saved from the last use, so that you don't need
 		# to keep adding calibration parameters, or going to various directories each time
 		if os.path.isfile('saved_dict.pkl'):
 			with open('saved_dict.pkl', 'rb') as f:
@@ -623,6 +628,17 @@ class MainWindow(QtWidgets.QMainWindow):
 		with open('saved_dict.pkl', 'wb') as f:
 			pickle.dump(self.load_dict, f)
 		sys.exit()
+
+	def open_multi_phasor_selector(self):
+		"""Opens the dialog for selecting multiple phasor clouds to display in one view"""
+		if not self.image_arr:
+			# Show warning if no images loaded
+			QtWidgets.QMessageBox.warning(self, "No Images", 
+										 "Please load at least one image first.")
+			return
+			
+		self.multi_phasor_selector = MultiPhasorSelector(self.image_arr)
+		self.multi_phasor_selector.show()
 
 # Executes the MainWindow
 if __name__ == "__main__":
