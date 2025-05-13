@@ -1236,7 +1236,7 @@ QPushButton:hover{
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>../icons/bar-chart.svg</normaloff>../icons/bar-chart.svg</iconset>
+         <normaloff>../icons/Multiphasor.png</normaloff>../icons/Multiphasor.png</iconset>
        </property>
        <property name="iconSize">
         <size>

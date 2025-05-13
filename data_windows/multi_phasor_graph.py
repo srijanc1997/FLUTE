@@ -185,7 +185,7 @@ class MultiPhasorGraph(QtWidgets.QMainWindow):
 				x_plot, y_plot, 
 				color=color, 
 				alpha=alpha,
-				s=10.0,	 # Smaller point size (3)
+				s=3.0,	 # Smaller point size (3)
 				marker='.',
 				linewidths=0,
 				edgecolors='none'
