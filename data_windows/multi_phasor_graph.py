@@ -27,9 +27,12 @@ class MultiPhasorGraph(QtWidgets.QMainWindow):
 		self.Plot.canvas.ax.set_xlim([0, 1])
 		self.Plot.canvas.ax.set_ylim([0, 0.6])
 		self.Plot.canvas.ax.plot(x, y, 'r')
-		self.Plot.canvas.ax.set_xlabel('g', fontsize=12, weight='bold')
-		self.Plot.canvas.ax.set_ylabel('s', fontsize=12, weight='bold')
-		
+		self.Plot.canvas.ax.set_xlabel('g', fontsize=23, weight='bold')
+		self.Plot.canvas.ax.set_ylabel('s', fontsize=23, weight='bold')
+		self.Plot.canvas.ax.tick_params(axis='both', labelsize=18)  # Adjust tick label font size
+		self.Plot.canvas.ax.spines['top'].set_visible(False)
+		self.Plot.canvas.ax.spines['right'].set_visible(False)
+
 		# Add lifetime labels on the semicircle
 		MHz = 80  # or use the actual MHz value if available
 		lifetimes = [0.5, 1, 2, 3, 4, 8]  # ns
@@ -43,11 +46,11 @@ class MultiPhasorGraph(QtWidgets.QMainWindow):
 		#	  self.Plot.canvas.ax.text(g[i]-0.05, s[i]+0.03, f"{t} ns", color='r', fontsize=9)
 		print(g, s)	   
 		# Plot the dots
-		self.Plot.canvas.ax.scatter(g, s, color='r', s=10)
+		self.Plot.canvas.ax.scatter(g, s, color='r', s=12)
 		print(g, s)
 		# Place the labels next to the dots
 		for i, t in enumerate(lifetimes):
-			self.Plot.canvas.ax.text(g[i]-0.04, s[i]+0.03, f"{t} ns", color='r', fontsize=9)
+			self.Plot.canvas.ax.text(g[i]-0.04, s[i]+0.03, f"{t} ns", color='r', fontsize=15)
 		self.Plot.canvas.draw()
 		
 
@@ -137,10 +140,10 @@ class MultiPhasorGraph(QtWidgets.QMainWindow):
 		lifetime_x = args[0][0]
 		lifetime_y = args[0][1]
 		lifetimes = [0.5, 1, 2, 3, 4, 8]
-		self.Plot.canvas.ax.scatter(lifetime_x, lifetime_y, color='r', s=10)
+		self.Plot.canvas.ax.scatter(lifetime_x, lifetime_y, color='r', s=12)
 		for i in range(6):
-			self.Plot.canvas.ax.text(lifetime_x[i]-0.05, lifetime_y[i]+0.03, str(lifetimes[i]) + " ns", color='r', fontsize=9)
-			
+			self.Plot.canvas.ax.text(lifetime_x[i]-0.05, lifetime_y[i]+0.03, str(lifetimes[i]) + " ns", color='r', fontsize=16)
+
 	def plot_all_clouds(self):
 		"""Plots all phasor clouds with their respective colors/colormaps and transparency"""
 		# Clear current images and scatter plots
@@ -199,7 +202,7 @@ class MultiPhasorGraph(QtWidgets.QMainWindow):
 			self.Plot.canvas.ax.scatter(
 				mean_x, mean_y,
 				color=color,  # Same color as the cloud
-				s=100,	# Larger point size for visibility
+				s=200,	# Larger point size for visibility
 				marker='X',	 # Distinctive marker
 				edgecolors='black',
 				linewidths=1.5,
@@ -229,14 +232,14 @@ class MultiPhasorGraph(QtWidgets.QMainWindow):
 			#	  color = color_or_cmap
 			#	  label = f"{cloud_id} ({color}, {int(alpha*100)}%)"
 			color = color_or_cmap
-			label = f"{cloud_id} ({color}, {int(alpha*100)}%)"
-			
+			# label = f"{cloud_id} ({color}, {int(alpha*100)}%)"
+			label = f"{cloud_id}"
 			patch = patches.Patch(color=color, alpha=alpha, label=label)
 			legend_entries.append(patch)
 			
 		# Add the legend
-		if legend_entries:
-			self.Plot.canvas.ax.legend(handles=legend_entries, loc='upper right', fontsize='small')
+		# if legend_entries:
+			# self.Plot.canvas.ax.legend(handles=legend_entries, loc='upper right', fontsize='small')
 			
 	def closeEvent(self, event):
 		"""Ran when the window is closed"""

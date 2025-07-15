@@ -98,8 +98,11 @@ class Graph(QtWidgets.QMainWindow):
 		self.Plot.canvas.ax.set_xlim([0, 1])
 		self.Plot.canvas.ax.set_ylim([0, 0.6])
 		self.Plot.canvas.ax.plot(x, y, 'r')
-		self.Plot.canvas.ax.set_xlabel('g', fontsize=12, weight='bold')
-		self.Plot.canvas.ax.set_ylabel('s', fontsize=12, weight='bold')
+		self.Plot.canvas.ax.set_xlabel('g', fontsize=23, weight='bold')
+		self.Plot.canvas.ax.set_ylabel('s', fontsize=23, weight='bold')
+		self.Plot.canvas.ax.tick_params(axis='both', labelsize=18)  # Adjust tick label font size
+		self.Plot.canvas.ax.spines['top'].set_visible(False)
+		self.Plot.canvas.ax.spines['right'].set_visible(False)
 		
 		self.btnSavePlot.clicked.connect(self.save_fig_as)
 		
@@ -357,9 +360,9 @@ class Graph(QtWidgets.QMainWindow):
 		lifetime_x = args[0][0]
 		lifetime_y = args[0][1]
 		lifetimes = [0.5, 1, 2, 3, 4, 8]
-		self.Plot.canvas.ax.scatter(lifetime_x, lifetime_y, color='r', s=10)
+		self.Plot.canvas.ax.scatter(lifetime_x, lifetime_y, color='r', s=12)
 		for i in range(6):
-			self.Plot.canvas.ax.text(lifetime_x[i]-0.05, lifetime_y[i]+0.03, str(lifetimes[i]) + " ns", color='r', fontsize=9)
+			self.Plot.canvas.ax.text(lifetime_x[i]-0.05, lifetime_y[i]+0.03, str(lifetimes[i]) + " ns", color='r', fontsize=15)
 
 	def set_fraction(self, x, y):
 		"""Changes the thresholding parameters for the fraction bound circles"""

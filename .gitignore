@@ -160,3 +160,4 @@ cython_debug/
 
 # Test files
 tests
+*.exe
